@@ -9,32 +9,9 @@ import xml.etree.cElementTree as ET
 #Global Vaiables
 alarmLogFile = "sample_alarms.xml"
 
-
+#Right now condsidering that there is just one alarm in the xml file.
 def parseXML(xmlFileName):
 	tree = ET.ElementTree(file=xmlFileName)
-	root = tree.getroot()
-	device = ""
-	managed_obj = ""
-	found = 0
-	for child in root:
-		print child.name
-	print "\n\n\n\n"
-	for element in tree.iter():
-		tag = element.tag
-		print element, tag
-		if tag.endswith("device"):
-			device = element.text
-			found += 1
-		if tag.endswith("managed-object"):
-			managed_obj = element.text
-			found += 1
-		if found == 2:
-			break
-	print device
-	print managed_obj
-	
-def tryP(n):
-	tree = ET.ElementTree(file=n)
 	root = tree.getroot()
 	alarmNoti = ""
 	lengthCommonString = 0
@@ -44,12 +21,23 @@ def tryP(n):
 			lengthCommonString = len(tag) - 18
 			alarmNoti = child
 			break
+	device = ""
+	managedObj = ""
+	found = 0
 	for element in alarmNoti:
-		print element.tag[lengthCommonString:]	
-
+		tag = element.tag[lengthCommonString:]
+		if tag == "device":
+			device = element.text
+			found += 1	
+		if tag == "managed-object":
+			managedObj = element.text
+			found += 1	
+		if found == 2:
+			break
+	print device
+	print managedObj
 
 if __name__ == "__main__":
-	#parseXML(alarmLogFile)
-	tryP(alarmLogFile)
+	parseXML(alarmLogFile)
 
 

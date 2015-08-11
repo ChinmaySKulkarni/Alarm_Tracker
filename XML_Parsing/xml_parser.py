@@ -1,9 +1,15 @@
 #!/usr/bin/python
+#	DESCRIPTION:
 #	This program is used to parse XML alarm files and 
 #	check the device and managed-object fields of each
 #	alarm entry against a list of IDs.
 #
-#	Created by: Chinmay Kulkarni
+#	EXECUTION:
+#	To run execute:
+#	python <python file>
+#
+#	CREATED BY:
+#	Chinmay Kulkarni
 
 import xml.etree.cElementTree as ET
 #Global Vaiables

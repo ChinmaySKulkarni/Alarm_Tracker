@@ -12,11 +12,20 @@
 #  Apache Spark job:
 #  $SPARK_HOME/bin/spark-submit  <python file>
 #	
+# -To deploy on a cluster instead of a local machine, make changes to
+#  SparkConf() parameters.
+#
 #
 # RESOURCES:
 # -pyspark API Documentation: https://spark.apache.org/docs/latest/api/python/
+#  This URL will be referred to as "API_DOCs".
 #
 # -Explanation of functions/APIs used:
+#
+#	SparkConf():
+#	Configuration for a Spark application. Used to set various Spark 
+#	parameters as key-value pairs. For more info, see:
+#	"API_DOCS"/pyspark.html?highlight=sparkconf#pyspark.SparkConf
 #
 #	SparkContext():
 #	The main entry point for Spark functionality and it 
@@ -44,10 +53,21 @@
 # Chinmay Kulkarni
 
 from pyspark import SparkContext
+from pyspark import SparkConf, SparkContext
+
+
+#Set up Apache Spark configurations.
+def configureSpark():
+	conf = SparkConf()
+	conf.setMaster("local")
+	conf.setAppName("Apache Spark Alarm Parser")
+	conf.set("spark.executor.memory", "1g")
+	return conf
+
 
 #Get the RDD strings from the supplied file.
-def getRDDStrings(logFile):
-	sc = SparkContext("local", "Spark Parser")
+def getRDDStrings(conf,logFile):
+	sc = SparkContext(conf = conf)
 	RDDLog = sc.textFile(logFile).cache()
 	return RDDLog
 
@@ -61,7 +81,8 @@ def textProcessing(RDDStrings):
 
 if __name__ == "__main__":
 	logFile = "./test.txt"
-	RDDStrings = getRDDStrings(logFile)
+	conf = configureSpark()
+	RDDStrings = getRDDStrings(conf,logFile)
 	numAs, numBs = textProcessing(RDDStrings)
 	print "No of lines with A:\t",numAs
 	print "No of lines with B:\t",numBs

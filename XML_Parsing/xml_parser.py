@@ -3,11 +3,22 @@
 #	check the device and managed-object fields of each
 #	alarm entry against a list of IDs.
 #
-#	Developed by: Chinmay Kulkarni
+#	Created by: Chinmay Kulkarni
 
 import xml.etree.cElementTree as ET
 #Global Vaiables
 alarmLogFile = "sample_alarms.xml"
+IDFile = "sample_IDs.txt"
+
+#Goes through the list of IDs and finds a matching ID in device or managed
+#Objects fields.
+def getID(IDFile,device,mgdObj):
+	IDs = open(IDFile,'r')
+	for line in IDs:
+		line = line.strip()
+		if line in device or line in mgdObj:
+			return line
+
 
 #Right now condsidering that there is just one alarm in the xml file.
 def parseXML(xmlFileName):
@@ -34,10 +45,13 @@ def parseXML(xmlFileName):
 			found += 1	
 		if found == 2:
 			break
-	print device
-	print managedObj
+	return device,managedObj
+
 
 if __name__ == "__main__":
-	parseXML(alarmLogFile)
-
+	device, mgdObj = parseXML(alarmLogFile)
+	print device,"\t",mgdObj
+	alarmID = getID(IDFile,device,mgdObj)
+	print "Found Alarm ID\t:",alarmID
+	print "In alarm entry:\tdevice= ",device,"\tmanagedObject = ", mgdObj
 

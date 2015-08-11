@@ -10,7 +10,7 @@
 # EXECUTION:
 # -To run this program, give the following command to submit the 
 #  Apache Spark job:
-#  $SPARK_HOME/bin/spark-submit  spark_parser.py
+#  $SPARK_HOME/bin/spark-submit  <python file>
 #	
 #
 # RESOURCES:

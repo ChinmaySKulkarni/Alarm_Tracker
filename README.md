@@ -35,3 +35,7 @@ TODO:
 	alarms) so that you don’t need to perform this expensive search in each 
 	alarm message. 	
 
+
+******
+Install Scala and Apache Spark According to the following instructions:
+http://stackoverflow.com/questions/31594937/error-invalid-or-corrupt-jarfile-sbt-sbt-launch-0-13-5-jar

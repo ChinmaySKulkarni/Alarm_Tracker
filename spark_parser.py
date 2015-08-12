@@ -48,11 +48,17 @@
 #	count():
 #	Returns the number of elements in that RDD.
 #
+#	collect():
+#	Returns the contents of the RDD as a list.
 #
 # CREATED BY: 
 # Chinmay Kulkarni
 
 from pyspark import SparkConf, SparkContext
+
+#Global Variables:
+logFile = "./XML_Parsing/sample_alarms.xml"
+IDFile = "./XML_Parsing/sample_IDs.txt"
 
 
 #Set up Apache Spark configurations.
@@ -61,30 +67,51 @@ def configureSpark():
 	conf.setMaster("local")
 	conf.setAppName("Apache Spark Alarm Parser")
 	conf.set("spark.executor.memory", "1g")
-	return conf
+	sc = SparkContext(conf = conf)
+	return sc
 
 
 #Get the RDD strings from the supplied file.
-def getRDDStrings(conf,logFile):
-	sc = SparkContext(conf = conf)
+def getRDDStrings(sc,logFile):
 	RDDLog = sc.textFile(logFile).cache()
 	return RDDLog
 
 
 #Counts the number of lines containing 'A's and 'B's.
-def textProcessing(RDDStrings):
+def exampleTextProcessing(RDDStrings):
 	numAs = RDDStrings.filter(lambda s: 'a' in s).count()
 	numBs = RDDStrings.filter(lambda s: 'b' in s).count()
 	return numAs,numBs
 
 
-if __name__ == "__main__":
-	#logFile = "./test.txt"
-	logFile = "./XML_Parsing/sample_alarms.xml"
-	conf = configureSpark()
-	RDDStrings = getRDDStrings(conf,logFile)
-	
-	numAs, numBs = textProcessing(RDDStrings)
-	print "No of lines with A:\t",numAs
-	print "No of lines with B:\t",numBs
+#Gets the matching ID from device or managed-object fields of an alarm message
+def getDeviceManagedObjectsID(RDDStrings,IDRDDStrings):
+	devices = RDDStrings.filter(lambda x : "<device>" in x)
+	mgdObjects = RDDStrings.filter(lambda x : "<managed-object>" in x)
+	devices = devices.collect().pop().strip()
+	devices = devices.lstrip("<device>").rstrip("</device>")
 
+	mgdObjects = mgdObjects.collect().pop().strip()
+	mgdObjects = mgdObjects.lstrip("<managed-object>")
+	mgdObjects = mgdObjects.rstrip("</managed-object>")
+	for ID in IDRDDStrings.collect():
+		ID = ID.strip()
+		if ID in devices:
+			return ID
+		elif ID in mgdObjects:
+			return ID
+		else:
+			return False
+
+
+if __name__ == "__main__":
+	sc = configureSpark()
+	RDDStrings = getRDDStrings(sc,logFile)
+	IDRDDStrings = getRDDStrings(sc,IDFile)
+	ID = getDeviceManagedObjectsID(RDDStrings,IDRDDStrings)	
+	print "\n\n\n"
+	if not ID:
+		print "No match."
+	else:
+		print "ID got is:\t", ID
+	print "\n\n\n"

@@ -52,7 +52,6 @@
 # CREATED BY: 
 # Chinmay Kulkarni
 
-from pyspark import SparkContext
 from pyspark import SparkConf, SparkContext
 
 
@@ -80,9 +79,11 @@ def textProcessing(RDDStrings):
 
 
 if __name__ == "__main__":
-	logFile = "./test.txt"
+	#logFile = "./test.txt"
+	logFile = "./XML_Parsing/sample_alarms.xml"
 	conf = configureSpark()
 	RDDStrings = getRDDStrings(conf,logFile)
+	
 	numAs, numBs = textProcessing(RDDStrings)
 	print "No of lines with A:\t",numAs
 	print "No of lines with B:\t",numBs

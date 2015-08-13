@@ -57,27 +57,3 @@
         <alarm-text>Connection to HT_2_eventsTest01_HT_CSR0 timed out</alarm-text>
     </alarm-notification>
 </notification>
-
-
-<notification
-    xmlns=\"urn:ietf:params:xml:ns:netconf:notification:1.0\">
-    <eventTime>2015-01-16T05:32:18.513566+00:00</eventTime>
-    <alarm-notification
-        xmlns=\"http://tail-f.com/ns/ncs-alarms\">
-        <alarm-class>new-alarm</alarm-class>
-        <device>ncs</device>
-        <type>service-activation-failure</type>
-        <managed-object
-            xmlns:virto=\"http://cisco.com/yang/nso/virto\">/virto:virto[virto:id=\"1_HTvinay02_HT\"]
-        </managed-object>
-        <specific-problem/>
-        <event-type>other</event-type>
-        <has-clear>unknown</has-clear>
-        <kind-of-alarm>unknown</kind-of-alarm>
-        <probable-cause>0</probable-cause>
-        <event-time>2015-01-16T05:32:18.433664+00:00</event-time>
-        <perceived-severity>critical</perceived-severity>
-        <alarm-text>Exception in callback: Cannot create service /virto:virto{1_HTvinay02_HT}</alarm-text>
-    </alarm-notification>
-</notification>
-

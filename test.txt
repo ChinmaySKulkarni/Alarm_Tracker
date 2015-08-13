@@ -1,6 +1,0 @@
-ab
-this line contains a
-this line contains b
-this line has both
-this line doesn't
-test file for pyspark

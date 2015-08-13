@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #	DESCRIPTION:
-#	This program is used to parse XML alarm files and 
-#	check the device and managed-object fields of each
-#	alarm entry against a list of IDs.
+#	This program is used to parse XML alarm files, extract
+#	the device and managed-object fields from an alarm message
+#	and then find a matching ID from a list of IDs.
 #
 #	EXECUTION:
 #	To run execute:
@@ -20,10 +20,10 @@ IDFile = "sample_IDs.txt"
 #Objects fields.
 def getID(IDFile,device,mgdObj):
 	IDs = open(IDFile,'r')
-	for line in IDs:
-		line = line.strip()
-		if line in device or line in mgdObj:
-			return line
+	for ID in IDs:
+		ID = ID.strip()
+		if ID in device or ID in mgdObj:
+			return ID
 
 
 #Right now condsidering that there is just one alarm in the xml file.

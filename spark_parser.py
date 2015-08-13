@@ -13,9 +13,9 @@
 # EXECUTION:
 # -To run this program, give the following command to submit the 
 #  Apache Spark job:
-#  $SPARK_HOME/bin/spark-submit  <python file>
+#  $SPARK_HOME/bin/spark-submit  <this file>
 #
-# -Pass the Alarms file location in the "logFile" variable as an HDFS URI or 
+# -Set the Alarms file location in the "logFile" variable as an HDFS URI or 
 #  local file. The ID list against which to be matched can be provided in the
 #  "IDFile" variable. 
 #	

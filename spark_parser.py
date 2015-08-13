@@ -1,6 +1,9 @@
 # DESCRIPTION:
-# -Parse Alarms using Pyspark which is the Python implementation for
-#  Apache Spark APIs.
+# -Parse Alarms to find the service ID that each alarm corresponds to 
+#  using Pyspark which is the Python implementation for
+#  Apache Spark APIs. This program will return a hashmap with keys as the alarm
+#  number and value as the matching ID. Correspondingly, action can be taken
+#  on those serviceIDs.
 #
 # -The 'SPARK_HOME' environment variable defines the location of the 
 #  Apache Spark installation. The pyspark utility can be found at:
@@ -11,6 +14,10 @@
 # -To run this program, give the following command to submit the 
 #  Apache Spark job:
 #  $SPARK_HOME/bin/spark-submit  <python file>
+#
+# -Pass the Alarms file location in the "logFile" variable as an HDFS URI or 
+#  local file. The ID list against which to be matched can be provided in the
+#  "IDFile" variable. 
 #	
 # -To deploy on a cluster instead of a local machine, make changes to
 #  SparkConf() parameters.
@@ -20,7 +27,7 @@
 # -pyspark API Documentation: https://spark.apache.org/docs/latest/api/python/
 #  This URL will be referred to as "API_DOCs".
 #
-# -Explanation of functions/APIs used:
+# -Explanation of pySpark APIs used:
 #
 #	SparkConf():
 #	Configuration for a Spark application. Used to set various Spark 
@@ -78,40 +85,55 @@ def getRDDStrings(sc,logFile):
 
 
 #Counts the number of lines containing 'A's and 'B's.
-def exampleTextProcessing(RDDStrings):
-	numAs = RDDStrings.filter(lambda s: 'a' in s).count()
-	numBs = RDDStrings.filter(lambda s: 'b' in s).count()
+def exampleTextProcessing(alarmsRDD):
+	numAs = alarmsRDD.filter(lambda s: 'a' in s).count()
+	numBs = alarmsRDD.filter(lambda s: 'b' in s).count()
 	return numAs,numBs
 
 
-#Gets the matching ID from device or managed-object fields of an alarm message
-def getDeviceManagedObjectsID(RDDStrings,IDRDDStrings):
-	devices = RDDStrings.filter(lambda x : "<device>" in x)
-	mgdObjects = RDDStrings.filter(lambda x : "<managed-object>" in x)
-	devices = devices.collect().pop().strip()
-	devices = devices.lstrip("<device>").rstrip("</device>")
+#Remove XML tags.
+def preprocessRDD(RDD,field):
+	openBracket = "<" + field + ">"
+	closeBracket = "</" + field + ">"
+	RDD = RDD.collect()
+	for value in RDD:
+		value = value.strip()
+		value = value.lstrip(openBracket).rstrip(closeBracket)
+	return RDD
 
-	mgdObjects = mgdObjects.collect().pop().strip()
-	mgdObjects = mgdObjects.lstrip("<managed-object>")
-	mgdObjects = mgdObjects.rstrip("</managed-object>")
-	for ID in IDRDDStrings.collect():
-		ID = ID.strip()
-		if ID in devices:
-			return ID
-		elif ID in mgdObjects:
-			return ID
-		else:
-			return False
+
+#Gets the matching ID from device or managed-object fields of an alarm message
+def getDeviceManagedObjectsID(sc,alarmsRDD,IDsRDD):
+	devices = alarmsRDD.filter(lambda x : "<device>" in x)
+	mgdObjects = alarmsRDD.filter(lambda x : "<managed-object>" in x)
+	devices = preprocessRDD(devices,"device")
+	mgdObjects = preprocessRDD(mgdObjects,"managed-object")
+	
+	alarmIDMappings = {}
+	totalDevices = len(devices)
+	totalMgdObjs = len(mgdObjects)
+	if totalDevices < totalMgdObjs:
+		totalAlarms = totalDevices
+	else:
+		totalAlarms = totalMgdObjs
+	for i in xrange(0,totalAlarms):
+		alarmIDMappings[i] = False
+		for ID in IDsRDD.collect():
+			ID = ID.strip()
+			if ID in devices[i]:
+				alarmIDMappings[i] = ID
+				break
+			elif ID in mgdObjects[i]:
+				alarmIDMappings[i] = ID
+				break
+	return alarmIDMappings
 
 
 if __name__ == "__main__":
 	sc = configureSpark()
-	RDDStrings = getRDDStrings(sc,logFile)
-	IDRDDStrings = getRDDStrings(sc,IDFile)
-	ID = getDeviceManagedObjectsID(RDDStrings,IDRDDStrings)	
-	print "\n\n\n"
-	if not ID:
-		print "No match."
-	else:
-		print "ID got is:\t", ID
+	alarmsRDD = getRDDStrings(sc,logFile)
+	IDsRDD = getRDDStrings(sc,IDFile)
+	alarmIDMappings = getDeviceManagedObjectsID(sc,alarmsRDD,IDsRDD)	
+	print "\n\n\nThe Alarm mappings are:"
+	print alarmIDMappings
 	print "\n\n\n"

@@ -64,7 +64,7 @@ FILES:
 
  	-To run this program, give the following command to submit the 
   	 Apache Spark job:
-  	 $SPARK_HOME/bin/spark-submit  <this file>
+  	 *$SPARK_HOME/bin/spark-submit  <this file>*
 
  	-Set the Alarms file location in the "logFile" variable as an HDFS 
 	 URI or local file. The ID list against which to be matched can be 

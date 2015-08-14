@@ -1,5 +1,8 @@
 Alarm Tracker
 
+This is just a simple program that I wrote to try out PySpark and develop an application that used Apache Spark.
+It does simple text parsing, string matching operations over data stored on RDDs.
+
 ********************************
 
 OBJECTIVE:
@@ -45,6 +48,7 @@ FILES:
 1. spark_parser.py
 
 	DESCRIPTION:
+
 	-Parse Alarms to find the service ID that each alarm corresponds to 
 	 using Pyspark which is the Python implementation for Apache Spark 
 	 APIs. This program will return a hashmap with keys as the alarm 
@@ -57,6 +61,7 @@ FILES:
 
 
 	EXECUTION:
+
  	-To run this program, give the following command to submit the 
   	 Apache Spark job:
   	 $SPARK_HOME/bin/spark-submit  <this file>

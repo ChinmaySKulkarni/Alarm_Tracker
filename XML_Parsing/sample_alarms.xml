@@ -1,11 +1,8 @@
 <notification
-    xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
     <eventTime>2015-07-10T16:12:29.992497+00:00</eventTime>
     <alarm-notification
-        xmlns="http://tail-f.com/ns/ncs-alarms">
         <alarm-class>new-alarm</alarm-class>
-        <device>SKT-3-vinay02-SKT-CSR-esc-vz</device>
-        <type>ned-live-tree-connection-failure</type>
+        <device>SKT-3-chinmay02-SKT-CSR-esc-vz</device>
         <managed-object>snmp</managed-object>
         <specific-problem/>
         <event-type>communicationsAlarm</event-type>
@@ -14,18 +11,15 @@
         <probable-cause>0</probable-cause>
         <event-time>2015-07-10T16:12:29.986535+00:00</event-time>
         <perceived-severity>major</perceived-severity>
-        <alarm-text>Connection to SKT-3-vinay02-SKT-CSR-esc-vz timed out</alarm-text>
+        <alarm-text>Connection to SKT-3-chinmay02-SKT-CSR-esc-vz timed out</alarm-text>
     </alarm-notification>
 </notification>
 
 <notification
-    xmlns=\"urn:ietf:params:xml:ns:netconf:notification:1.0\">
     <eventTime>2015-01-21T17:04:15.215021+00:00</eventTime>
     <alarm-notification
-        xmlns=\"http://tail-f.com/ns/ncs-alarms\">
         <alarm-class>new-alarm</alarm-class>
         <device>cpe-123456</device>
-        <type>ned-live-tree-connection-failure</type>
         <managed-object>snmp</managed-object>
         <specific-problem/>
         <event-type>communicationsAlarm</event-type>
@@ -39,13 +33,10 @@
 </notification>
 
 <notification
-    xmlns=\"urn:ietf:params:xml:ns:netconf:notification:1.0\">
     <eventTime>2015-01-28T00:40:02.572929+00:00</eventTime>
     <alarm-notification
-        xmlns=\"http://tail-f.com/ns/ncs-alarms\">
         <alarm-class>new-alarm</alarm-class>
         <device>HT_2_eventsTest01_HT_CSR0</device>
-        <type>ned-live-tree-connection-failure</type>
         <managed-object>snmp</managed-object>
         <specific-problem/>
         <event-type>communicationsAlarm</event-type>
